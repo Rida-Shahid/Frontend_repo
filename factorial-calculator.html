@@ -1,0 +1,31 @@
+
+<!doctype html>
+<html>
+<head>
+    <title>factorial calculator</title>
+    <style>
+        body {
+            font-family: arial, sans-serif;
+        }
+        #result {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>factorial calculator</h1>
+    <input type="number" id="num" placeholder="enter a number">
+    <button onclick="calculatefactorial()">calculate</button>
+    <p id="result"></p>
+    <script>
+        function calculatefactorial() {
+            let num = parseint(document.getelementbyid("num").value);
+            let factorial = 1;
+            for (let i = 1; i <= num; i++) {
+                factorial *= i;
+            }
+            document.getelementbyid("result").innertext = `the factorial of ${num} is: ${factorial}`;
+        }
+    </script>
+</body>
+</html>
