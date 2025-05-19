@@ -7,31 +7,58 @@ template = """
 <!doctype html>
 <html>
 <head>
-    <title>factorial calculator</title>
+    <title>Factorial Calculator</title>
     <style>
         body {
-            font-family: arial, sans-serif;
+            font-family: Arial, sans-serif;
         }
         #result {
             font-weight: bold;
         }
+        form {
+            width: 50%;
+            margin: 40px auto;
+        }
+        input[type="number"] {
+            width: 100%;
+            height: 30px;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            width: 100%;
+            height: 30px;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
     </style>
 </head>
 <body>
-    <h1>factorial calculator</h1>
+    <h1 style="text-align: center;">Factorial Calculator</h1>
     <form method="post">
-        <input type="number" name="num" placeholder="enter a number">
-        <input type="submit" value="calculate">
+        <input type="number" name="num" placeholder="Enter a number">
+        <input type="submit" value="Calculate">
     </form>
     {% if result %}
-        <p id="result">the factorial of {{ num }} is: {{ result }}</p>
+        <p id="result" style="text-align: center;">The factorial of {{ num }} is: {{ result }}</p>
     {% endif %}
 </body>
 </html>
 """
 
 def calculate_factorial(n):
-    if n == 0:
+    if n < 0:
+        return "Error: Factorial is not defined for negative numbers"
+    elif n == 0 or n == 1:
         return 1
     else:
         return n * calculate_factorial(n-1)
@@ -39,10 +66,13 @@ def calculate_factorial(n):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        num = int(request.form['num'])
-        result = calculate_factorial(num)
-        return render_template_string(template, num=num, result=result)
+        try:
+            num = int(request.form['num'])
+            result = calculate_factorial(num)
+            return render_template_string(template, num=num, result=result)
+        except ValueError:
+            return render_template_string(template, error="Please enter a valid number")
     return render_template_string(template)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
