@@ -19,12 +19,17 @@
     <p id="result"></p>
     <script>
         function calculatefactorial() {
-            let num = parseint(document.getelementbyid("num").value);
-            let factorial = 1;
-            for (let i = 1; i <= num; i++) {
-                factorial *= i;
+            let num = parseInt(document.getElementById("num").value);
+            let factorial = calculateFactorial(num);
+            document.getElementById("result").innerText = `the factorial of ${num} is: ${factorial}`;
+        }
+
+        function calculateFactorial(n) {
+            if (n == 0) {
+                return 1;
+            } else {
+                return n * calculateFactorial(n-1);
             }
-            document.getelementbyid("result").innertext = `the factorial of ${num} is: ${factorial}`;
         }
     </script>
 </body>
