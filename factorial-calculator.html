@@ -1,4 +1,9 @@
+```python
+from flask import Flask, render_template_string, request
 
+app = Flask(__name__)
+
+template = """
 <!doctype html>
 <html>
 <head>
@@ -14,23 +19,30 @@
 </head>
 <body>
     <h1>factorial calculator</h1>
-    <input type="number" id="num" placeholder="enter a number">
-    <button onclick="calculatefactorial()">calculate</button>
-    <p id="result"></p>
-    <script>
-        function calculatefactorial() {
-            let num = parseInt(document.getElementById("num").value);
-            let factorial = calculateFactorial(num);
-            document.getElementById("result").innerText = `the factorial of ${num} is: ${factorial}`;
-        }
-
-        function calculateFactorial(n) {
-            if (n == 0) {
-                return 1;
-            } else {
-                return n * calculateFactorial(n-1);
-            }
-        }
-    </script>
+    <form method="post">
+        <input type="number" name="num" placeholder="enter a number">
+        <input type="submit" value="calculate">
+    </form>
+    {% if result %}
+        <p id="result">the factorial of {{ num }} is: {{ result }}</p>
+    {% endif %}
 </body>
 </html>
+"""
+
+def calculate_factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * calculate_factorial(n-1)
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        num = int(request.form['num'])
+        result = calculate_factorial(num)
+        return render_template_string(template, num=num, result=result)
+    return render_template_string(template)
+
+if __name__ == '__main__':
+    app.run(debug=True)
